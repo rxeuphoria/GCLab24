@@ -1,5 +1,8 @@
 package co.grandcircus.lab24;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -9,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import co.grandcircus.lab24.entity.Party;
 import co.grandcircus.lab24.entity.PartyOption;
+import co.grandcircus.lab24.entity.Rsvp;
 
 @Controller
 public class PartyPlannerController {
@@ -19,6 +24,9 @@ public class PartyPlannerController {
 	
 	@Autowired
 	private PartyOptionRepository optionDao;
+	
+	@Autowired 
+	private RsvpRepository rsvpDao;
 
 	@RequestMapping("/")
 	public String showHome(Model model) {
@@ -58,6 +66,25 @@ public class PartyPlannerController {
 		optionDao.save(pizza);
 		return "redirect:/vote";
 	}
+	
+	@PostMapping("/addRsvp")
+	public String addRsvp(Rsvp person) {
+		rsvpDao.save(person);
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/details")
+	public String showDetails(@RequestParam("id") Long id, Party party, Model model) {
+		Party party1 = dao.findById(id).orElse(null);
+		//TODO need to fix the list problem
+		
+	
+		model.addAttribute("party", party1);
+		System.out.println(party1);
+		
+		return "details";
+	}
+	
 	
 	
 	
